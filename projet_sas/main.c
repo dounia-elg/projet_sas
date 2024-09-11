@@ -34,7 +34,7 @@ void ajouter_etudiant() {
     scanf("%s", etd.departement);
     printf("Entrez la note generale : ");
     scanf("%f", &etd.note);
-    
+
     etudiants[nbr] = etd;
     nbr++;
     printf("Etudiant ajoute avec succes.\n");
@@ -76,6 +76,76 @@ void supprimer_etudiant() {
             nbr--;
             printf("Etudiant supprime avec succes.\n");
             return;
+        }
+    }
+}
+
+void afficher_details_etudiant(Etudiant etd) {
+    int num,i;
+    printf("Entrez le numero de letudiant a afficher : ");
+    scanf("%d", &num);
+
+    for (i = 0; i < nbr; i++) {
+        if (etudiants[i].num == num) {
+            printf("Numro : %d\n", etd.num);
+            printf("Nom : %s\n", etd.nom);
+            printf("Prenom : %s\n", etd.prenom);
+            printf("Date de naissance : %s\n", etd.date);
+            printf("Departement : %s\n", etd.departement);
+            printf("Note generale : %.2f\n", etd.note);
+            return;
+        }
+    }
+}
+
+void calculer_moyenne_generale() {
+    float note_total= 0;
+    int compter= 0;
+    float moyenne_par_departement[MAX_ETUDIANTS] = {0};
+    int compter_par_departement[MAX_ETUDIANTS] = {0};
+    char departements[MAX_ETUDIANTS][MAX_DEPARTEMENT];
+    int num_departements = 0;
+    int i;
+
+    for (i = 0; i < nbr; i++) {
+        note_total += etudiants[i].note;
+        compter++;
+    }
+
+    printf("Moyenne generale de luniversite : %.2f\n", note_total / compter);
+
+    for (i = 0; i < num_departements; i++) {
+        printf("Moyenne pour le departement %s : %.2f\n", departements[i], moyenne_par_departement[i] / compter_par_departement[i]);
+    }
+}
+
+void rechercher_etudiant_par_nom() {
+    char nom[MAX_NOM];
+    int i;
+    printf("Entrez le nom de l etudiant a rechercher : ");
+    scanf("%s", nom);
+
+    for (i = 0; i < nbr; i++) {
+        if (strcmp(etudiants[i].nom, nom) == 0) {
+            afficher_details_etudiant(etudiants[i]);
+            return;
+        }
+        else{
+            printf("Étudiant non trouvé.\n");
+        }
+    }
+}
+
+void afficher_etd_par_departement() {
+    char departement[MAX_DEPARTEMENT];
+    int i;
+    printf("Entrez le departement : ");
+    scanf("%s", departement);
+
+    printf("Liste des etudiants inscrits dans ce departement %s :\n", departement);
+    for (i = 0; i < nbr; i++) {
+        if (strcmp(etudiants[i].departement, departement) == 0) {
+            afficher_details_etudiant(etudiants[i]);
         }
     }
 }
