@@ -6,7 +6,7 @@
 #define MAX_DEPARTEMENT 20
 #define MAX_NOM 20
 #define MAX_PRENOM 20
-#define SEUIL 10.00
+
 
 typedef struct{
     int num;
@@ -149,7 +149,7 @@ void calculer_moyenne_generale() {
     char departements[MAX_ETUDIANTS][MAX_DEPARTEMENT];
     int num_dep = 0;
     int i,j;
-    int dep_index = 0;
+    int dep_index = -1;
 
     for (i = 0; i < nbr; i++) {
         note_total += etudiants[i].note;
@@ -162,7 +162,7 @@ void calculer_moyenne_generale() {
             }
         }
 
-        if (dep_index == 0) {
+        if (dep_index == -1) {
             dep_index = num_dep++;
             strcpy(departements[dep_index], etudiants[i].departement);
         }
@@ -183,6 +183,56 @@ void calculer_moyenne_generale() {
     }
 }
 
+void statistiques(){
+    int i;
+    int nbr_dep[MAX_ETUDIANTS]={0};
+    char departements[MAX_ETUDIANTS][MAX_DEPARTEMENT];
+    int num_dep=0;
+    float seuil;
+    int nbr_reussite[MAX_ETUDIANTS]={0};
+    int dep_index= -1;
+    char departement[MAX_DEPARTEMENT];
+
+
+    //Afficher le nombre total d'étudiants inscrits:
+    printf("nombre total d'étudiants inscrits:%d\n",nbr);
+
+    //Afficher le nombre d'étudiants dans chaque département.
+    printf("nombre d'étudiants dans chaque département:\n");
+    for(i=0;i<num_dep;i++){
+        printf("departement %s:%d\n",departements[i],nbr_dep[i]);
+    }
+
+    //Afficher les étudiants ayant une moyenne générale supérieure à un certain seuil.
+    printf("entrer le seuil de la moyenne generale:");
+    scanf("%f",&seuil);
+    printf("les etudiants avec une moyenne generale superieure a %.2f:\n",seuil);
+    for(i=0;i<nbr;i++){
+        if(etudiants[i].note>seuil){
+            printf("Numero : %d\n", etudiants[i].num);
+            printf("Nom : %s\n", etudiants[i].nom);
+            printf("Prenom : %s\n", etudiants[i].prenom);
+            printf("Date de naissance : %s\n", etudiants[i].date);
+            printf("Departement : %s\n", etudiants[i].departement);
+            printf("Note generale : %.2f\n", etudiants[i].note);
+            printf("\n");
+        }
+    }
+
+    //Afficher le nombre d'étudiants ayant réussi dans chaque département:
+    for(i=0;i<nbr;i++){
+        if(etudiants[i].note>=10.00){
+            if(dep_index!= -1){
+                nbr_reussite[dep_index]++;
+            }
+        }
+    }
+    printf("Afficher le nombre d'étudiants ayant réussi dans chaque département:\n");
+    for(i=0;i<num_dep;i++){
+        printf("departement %s:%d\n",departement[i],nbr_reussite[i]);
+    }
+}
+
 int main(){
     int choix;
     do{
@@ -194,6 +244,7 @@ int main(){
         printf("5= Rechercher un étudiant par son nom\n");
         printf("6= Afficher la liste des étudiants inscrits dans un département spécifique\n");
         printf("7= Calculer la moyenne générale\n");
+        printf("8= Statistiques\n");
         printf("entrer votre choix:");
         scanf("%d",&choix);
 
@@ -218,6 +269,9 @@ int main(){
                 break;
             case 7:
                 calculer_moyenne_generale();
+                break;
+            case 8:
+                statistiques();
                 break;
             default:
                 printf("choix invalide. \n");
